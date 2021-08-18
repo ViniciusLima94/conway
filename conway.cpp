@@ -9,8 +9,8 @@ namespace cgl
     conway::conway()
     {
         // Define default parameters
-        this->nx = 20;
-        this->ny = 20;
+        this->nx = 20+2;
+        this->ny = 20+2;
         this->p_init   = 0.1;
         this->ind = '*';
         // Allocate grid
@@ -22,8 +22,8 @@ namespace cgl
     conway::conway(std::size_t nx, std::size_t ny, float p_init)
     {
         // Define default parameters
-        this->nx = nx+1;
-        this->ny = ny+1;
+        this->nx = nx+2;
+        this->ny = ny+2;
         this->p_init   = p_init;
         this->ind = '*';
         // Allocate grid
@@ -35,8 +35,8 @@ namespace cgl
     conway::conway(std::size_t nx, std::size_t ny, float p_init, char ind)
     {
         // Define default parameters
-        this->nx = nx+1;
-        this->ny = ny+1;
+        this->nx = nx+2;
+        this->ny = ny+2;
         this->p_init   = p_init;
         this->ind = ind;
         // Allocate grid
@@ -48,12 +48,11 @@ namespace cgl
     conway::conway(std::size_t nx, std::size_t ny, int** init, char ind)
     {
         // Define default parameters
-        this->nx = nx+1;
-        this->ny = ny+1;
-        this->p_init   = p_init;
+        this->nx = nx+2;
+        this->ny = ny+2;
         this->ind = ind;
         // Allocate grid
-        this->allocate_grid();
+        this->grid = this->allocate_grid();
         // Initialize grid
         this->initialize_grid(init);
     }
@@ -72,7 +71,7 @@ namespace cgl
                 }
                 else 
                 {
-                    std::cout << ".";
+                    std::cout << " ";
                 }
             }
             std::cout << "\n";
@@ -123,12 +122,12 @@ namespace cgl
         }
     }
 
-    void conway::initialize_grid(int** init_pop)
+    void conway::initialize_grid(int** init)
     {
         // Copy buffer to grid
         for(int r=1; r<this->nx-1; r++) {
             for(int c=1; c<this->ny-1; c++) {
-                this->grid[r][c] = init_pop[r][c];
+                this->grid[r][c] = init[r-1][c-1];
             }
         }
     }
