@@ -46,10 +46,11 @@ namespace cgl
             void simulate(int n_gens);
 
             //_________________________________________GET METHODS________________________________________//
-            void get_grid();
-            void get_nx();
-            void get_ny();
-            void get_gridsize();
+            int** get_grid();
+            int get_nx();
+            int get_ny();
+            int get_pad();
+            int get_gridsize();
             
             //_________________________________________SET METHODS________________________________________//
 

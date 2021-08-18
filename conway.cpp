@@ -9,9 +9,9 @@ namespace cgl
     conway::conway()
     {
         // Define default parameters
-        this->pad = 2;
-        this->nx  = 20+this->pad;
-        this->ny  = 20+this->pad;
+        this->pad = 1;
+        this->nx  = 20+2*this->pad;
+        this->ny  = 20+2*this->pad;
         this->p_init   = 0.1;
         this->ind = '*';
         // Allocate grid
@@ -24,8 +24,8 @@ namespace cgl
     {
         // Define default parameters
         this->pad = pad;
-        this->nx  = nx+pad;
-        this->ny  = ny+pad;
+        this->nx  = nx+2*pad;
+        this->ny  = ny+2*pad;
         this->p_init   = p_init;
         this->ind = '*';
         // Allocate grid
@@ -38,8 +38,8 @@ namespace cgl
     {
         // Define default parameters
         this->pad = pad;
-        this->nx  = nx+pad;
-        this->ny  = ny+pad;
+        this->nx  = nx+2*pad;
+        this->ny  = ny+2*pad;
         this->p_init   = p_init;
         this->ind = ind;
         // Allocate grid
@@ -52,8 +52,8 @@ namespace cgl
     {
         // Define default parameters
         this->pad = pad;
-        this->nx  = nx+pad;
-        this->ny  = ny+pad;
+        this->nx  = nx+2*pad;
+        this->ny  = ny+2*pad;
         this->ind = ind;
         // Allocate grid
         this->grid = this->allocate_grid();
@@ -128,12 +128,21 @@ namespace cgl
 
     void conway::initialize_grid(int** init)
     {
-        // Copy buffer to grid
-        for(auto r=this->pad; r<this->nx-this->pad; r++) {
-            for(auto c=this->pad; c<this->ny-this->pad; c++) {
-                this->grid[r][c] = init[r-this->pad][c-this->pad];
+        // for(auto i=0; i<11; i++)
+        // {
+        //     for(auto j=0; j<13; j++) 
+        //     {
+        //         std::cout << init[i][j] << ", ";
+        //     }
+        //     std::cout << "\n";
+        // }
+    
+        for(auto r=0; r<this->nx-2*this->pad; r++) {
+            for(auto c=0; c<this->ny-2*this->pad; c++) {
+                this->grid[r+this->pad][c+this->pad] = init[r][c];
             }
         }
+
     }
 
     void conway::update_state()
@@ -227,15 +236,28 @@ namespace cgl
     }
 
     //_________________________________________GET METHODS________________________________________//
-    void conway::get_grid()
-    {}
+    int** conway::get_grid()
+    {
+        return this->grid;
+    }
 
-    void conway::get_gridsize()
-    {}
+    int conway::get_gridsize()
+    {
+        return (this->nx-1)*(this->ny-1);
+    }
 
-    void conway::get_nx()
-    {}
+    int conway::get_nx()
+    {
+        return this->nx;
+    }
 
-    void conway::get_ny()
-    {}
+    int conway::get_ny()
+    {
+        return this->ny;
+    }
+
+    int conway::get_pad()
+    {
+        return this->pad;
+    }
 }

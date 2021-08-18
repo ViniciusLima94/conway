@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 #include "conway.h"
 
 using namespace cgl;
@@ -39,12 +40,31 @@ int main()
     //     std::cout << "\n";
     // }
 
-    conway pop1 = conway(11,13,10, a,'o');
-    // conway pop1 = conway(40,100,10,0.15,'o');
-    // pop1.simulate(10000000);
+    // conway pop1 = conway(11,13,10, a,'o');
+    conway pop1 = conway(40,100,10,0.15,'o');
+    // pop1.simulate(1000000000);
+    system("clear");
+    pop1.print_grid();
+    int gen=0;
+    while(true)
+    {
+            std::cout<< "gen: " << gen << "\n";
+            pop1.run(1);
+            pop1.print_grid();
+            sleep(1);
+            system("clear");
+            gen++;
+    }
+    // std::cout<<"\n";
+    // std::cout<<pop1.get_nx();
+    // std::cout<<"\n";
+    // std::cout<<pop1.get_ny();
+    // std::cout<<"\n";
+    // std::cout<<pop1.get_pad();
+    // std::cout<<"\n";
 
     // std::cout << "gen 0\n";
-    pop1.print_grid();
+    // pop1.print_grid();
     // std::cout << "\n\n";
 
     // for(auto i=0; i<10; i++)
