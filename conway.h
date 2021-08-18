@@ -8,6 +8,8 @@ namespace cgl
         private:
             // Grid size
             std::size_t nx, ny;
+            // Padding of the board
+            int pad;
             // Probability of initialize
             float p_init;
             // Grid
@@ -30,11 +32,11 @@ namespace cgl
             // Default constructor
             conway();
             // Constructor defining grid size and initial population
-            conway(std::size_t nx, std::size_t ny, float p_init);
+            conway(std::size_t nx, std::size_t ny, int pad, float p_init);
             // Constructor defining grid size and char representing and individual
-            conway(std::size_t nx, std::size_t ny, float p_init, char ind);
+            conway(std::size_t nx, std::size_t ny, int pad, float p_init, char ind);
             // Constructor defining grid size and char representing and individual and initial state
-            conway(std::size_t nx, std::size_t ny, int** init, char ind);
+            conway(std::size_t nx, std::size_t ny, int pad, int** init, char ind);
             
             //____________________________________VISUALIZATION METHODS___________________________________//
             void print_grid();

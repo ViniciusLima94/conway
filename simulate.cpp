@@ -30,21 +30,21 @@ int main()
         }
     }
 
-    for(auto i=0; i<11; i++)
-    {
-        for(auto j=0; j<13; j++) 
-        {
-            std::cout << a[i][j] << ", ";
-        }
-        std::cout << "\n";
-    }
+    // for(auto i=0; i<11; i++)
+    // {
+    //     for(auto j=0; j<13; j++) 
+    //     {
+    //         std::cout << a[i][j] << ", ";
+    //     }
+    //     std::cout << "\n";
+    // }
 
-    conway pop1 = conway(11,13,a,'o');
-    // conway pop1 = conway(40,100,0.15,'o');
-    pop1.simulate(10000000);
+    conway pop1 = conway(11,13,10, a,'o');
+    // conway pop1 = conway(40,100,10,0.15,'o');
+    // pop1.simulate(10000000);
 
     // std::cout << "gen 0\n";
-    // pop1.print_grid();
+    pop1.print_grid();
     // std::cout << "\n\n";
 
     // for(auto i=0; i<10; i++)

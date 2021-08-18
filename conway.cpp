@@ -9,8 +9,9 @@ namespace cgl
     conway::conway()
     {
         // Define default parameters
-        this->nx = 20+2;
-        this->ny = 20+2;
+        this->pad = 2;
+        this->nx  = 20+this->pad;
+        this->ny  = 20+this->pad;
         this->p_init   = 0.1;
         this->ind = '*';
         // Allocate grid
@@ -19,11 +20,12 @@ namespace cgl
         this->initialize_grid(this->p_init);
     }
 
-    conway::conway(std::size_t nx, std::size_t ny, float p_init)
+    conway::conway(std::size_t nx, std::size_t ny, int pad, float p_init)
     {
         // Define default parameters
-        this->nx = nx+2;
-        this->ny = ny+2;
+        this->pad = pad;
+        this->nx  = nx+pad;
+        this->ny  = ny+pad;
         this->p_init   = p_init;
         this->ind = '*';
         // Allocate grid
@@ -32,11 +34,12 @@ namespace cgl
         this->initialize_grid(this->p_init);
     }
 
-    conway::conway(std::size_t nx, std::size_t ny, float p_init, char ind)
+    conway::conway(std::size_t nx, std::size_t ny, int pad, float p_init, char ind)
     {
         // Define default parameters
-        this->nx = nx+2;
-        this->ny = ny+2;
+        this->pad = pad;
+        this->nx  = nx+pad;
+        this->ny  = ny+pad;
         this->p_init   = p_init;
         this->ind = ind;
         // Allocate grid
@@ -45,11 +48,12 @@ namespace cgl
         this->initialize_grid(this->p_init);
     }
 
-    conway::conway(std::size_t nx, std::size_t ny, int** init, char ind)
+    conway::conway(std::size_t nx, std::size_t ny, int pad, int** init, char ind)
     {
         // Define default parameters
-        this->nx = nx+2;
-        this->ny = ny+2;
+        this->pad = pad;
+        this->nx  = nx+pad;
+        this->ny  = ny+pad;
         this->ind = ind;
         // Allocate grid
         this->grid = this->allocate_grid();
@@ -115,8 +119,8 @@ namespace cgl
         // Random seed based on time 
         srand (time(NULL));
 
-        for(auto r=1; r<this->nx-1; r++) {
-            for(auto c=1; c<this->ny-1; c++) {
+        for(auto r=this->pad; r<this->nx-this->pad; r++) {
+            for(auto c=this->pad; c<this->ny-this->pad; c++) {
                if((float) rand()/RAND_MAX < p_init) this->grid[r][c] = 1;
             }
         }
@@ -125,9 +129,9 @@ namespace cgl
     void conway::initialize_grid(int** init)
     {
         // Copy buffer to grid
-        for(int r=1; r<this->nx-1; r++) {
-            for(int c=1; c<this->ny-1; c++) {
-                this->grid[r][c] = init[r-1][c-1];
+        for(auto r=this->pad; r<this->nx-this->pad; r++) {
+            for(auto c=this->pad; c<this->ny-this->pad; c++) {
+                this->grid[r][c] = init[r-this->pad][c-this->pad];
             }
         }
     }
