@@ -6,10 +6,8 @@ using namespace cgl;
 
 int main() 
 {
-    int** a = new int*[11];
-    for(int i = 0; i < 11; ++i)
-        a[i] = new int[13];
 
+    // Initialize a spaceship
     int init[11][13] = {
         {0,0,0,0,1,0,0,0,0,0,0,0,0},
         {0,0,0,1,1,1,0,0,0,0,0,0,0},
@@ -23,13 +21,17 @@ int main()
         {0,0,0,0,0,0,0,0,0,1,0,0,1},
         {0,0,0,0,0,0,0,0,0,0,0,0,1},
     };
-    // int *a[11];
-    
+
+    int** ship = new int*[11];
+    for(int i = 0; i < 11; ++i)
+        ship[i] = new int[13];
+
     for(int i=0; i<11; ++i) {
         for(int j=0; j<13; j++) {
-            a[i][j]=init[i][j];
+            ship[i][j]=init[i][j];
         }
     }
+    
 
     // for(auto i=0; i<11; i++)
     // {
@@ -39,12 +41,18 @@ int main()
     //     }
     //     std::cout << "\n";
     // }
+    //
+    // initializers::spaceship ship;
 
-    // conway pop1 = conway(11,13,10, a,'o');
-    conway pop1 = conway(40,100,10,0.15,'o');
+    // ship.nx = 10;
+    // ship.ny = 10;
+    // ship->init = zeros(ship.nx, ship.ny);
+
+    conway pop1 = conway(11,13,50, ship, '*');
+    // conway pop1 = conway(40,100,10,0.2,'o');
     // pop1.simulate(1000000000);
-    system("clear");
-    pop1.print_grid();
+    // system("clear");
+    // pop1.print_grid();
     int gen=0;
     while(true)
     {

@@ -23,3 +23,17 @@ int **zeros(int n_rows,int n_cols) {
     }
     return matrix;
 }
+
+// int** mat2ptr(int r, int c, int mat[][c])
+// {
+//     int** ptr = new int*[r];
+//     for(int i = 0; i < r; ++i)
+//         ptr[i] = new int[c];
+
+//     for(int i=0; i<r; ++i) {
+//         for(int j=0; j<c; j++) {
+//             ptr[i][j]=mat[i][j];
+//         }
+//     }
+//     return ptr;
+// }
