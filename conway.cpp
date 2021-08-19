@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <stdlib.h>
 #include <unistd.h>
 #include "conway.h"
@@ -269,7 +270,8 @@ namespace cgl
 
         for(auto r=0; r<this->nx; r++) {
             for(auto c=0; c<this->ny; c++) {
-                myfile << this->grid[r][c] << ",";
+                if(c<this->ny-1) myfile << this->grid[r][c] << " ";
+                else myfile << this->grid[r][c];
             }
             myfile << "\n";
         }
