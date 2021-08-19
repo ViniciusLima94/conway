@@ -54,7 +54,7 @@ int main()
     // system("clear");
     // pop1.print_grid();
     int gen=0;
-    while(true)
+    while(500)
     {
             std::cout<< "gen: " << gen << "\n";
             pop1.run(1);
@@ -62,6 +62,9 @@ int main()
             sleep(1);
             system("clear");
             gen++;
+            string s = "data/gen"+to_string(gen)+".txt";
+            const char* filename = s.c_str();
+            pop1.save(filename)
     }
     // std::cout<<"\n";
     // std::cout<<pop1.get_nx();

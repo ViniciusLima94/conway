@@ -260,4 +260,20 @@ namespace cgl
     {
         return this->pad;
     }
+
+    void conway::save(const char* filename)
+    {
+        // Save results to file
+        std::ofstream myfile;
+        myfile.open(filename);
+
+        for(auto r=0; r<this->nx; r++) {
+            for(auto c=0; c<this->ny; c++) {
+                myfile << this->grid[r][c] << ",";
+            }
+            myfile << "\n";
+        }
+        myfile.close();
+    }
+
 }

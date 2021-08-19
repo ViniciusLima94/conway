@@ -52,7 +52,6 @@ namespace cgl
             int get_pad();
             int get_gridsize();
             
-            //_________________________________________SET METHODS________________________________________//
-
+            void save(const char* filename);
     };
 } // Conway's game of life (cgl) namespace
