@@ -3,7 +3,7 @@ import pandas            as pd
 import matplotlib.pyplot as plt
 
 # Number of iterations used
-n_iter = 300
+n_iter = 100
 
 grid = []
 for i in range(n_iter):

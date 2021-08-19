@@ -3,7 +3,7 @@
 #include <string>
 #include "conway.h"
 
-#define SPACESHIP false
+#define SPACESHIP true
 
 using namespace cgl;
 

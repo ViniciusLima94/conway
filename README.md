@@ -8,4 +8,14 @@ Implementation of Conway's game of life in C++.
 2. Any dead cell with three live neighbours becomes a live cell.
 3. All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
-![](figures/30P5H2V0.gif)
+### How to run
+
+To compile use: g++ simulate.cpp conway.cpp
+
+In simulate.cpp if SPACESHIP is set to false simulate a randomly initiated grid.
+
+![Random initiated grid](figures/RANDOM.gif)
+
+Otherwise it will run the [30P5H2V0](https://bitstorm.org/gameoflife/lexicon/#bk5) spaceship.
+
+![30P5H2V0 spaceship](figures/30P5H2V0.gif)
