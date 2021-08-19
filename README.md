@@ -12,6 +12,8 @@ Implementation of Conway's game of life in C++.
 
 To compile use: g++ simulate.cpp conway.cpp
 
+To plot the results of the simulation use: ipython plotting.py
+
 In simulate.cpp if SPACESHIP is set to false simulate a randomly initiated grid.
 
 ![Random initiated grid](figures/RANDOM.gif)
