@@ -1,6 +1,5 @@
 // Header for Conway's game of life class definition
 #include <cstddef>
-#include "util.h"
 
 namespace cgl
 {
@@ -14,26 +13,27 @@ namespace cgl
             // Probability of initialize
             float p_init;
             // Grid
-            int** grid;
+            int* grid_host;
+            int* grid_device;
             // Individual char representation
             char ind;
             // Allocate grid
-            int** allocate_grid();
+            int* allocate_grid();
             // Initialize grid
-            void initialize_grid(float p_init);
+            // void initialize_grid(float p_init);
             // Initialize grid
-            void initialize_grid(int** init);
+            // void initialize_grid(int** init);
             // Copy data from host to device
             void update_device();
             // Copy data from device to host
             void update_host();
             // Update method
-            __global__
-            void update_state();
+            // __global__
+            // void update_state();
             // Method to check how many live neighbors a given cell have
-            int check_neighbors(int i, int j);
+            // int check_neighbors(int i, int j);
             // Apply the rules to a given cell
-            int rules(int state, int n);
+            // int rules(int state, int n);
         public:
             // Default constructor
             conway();
@@ -48,16 +48,16 @@ namespace cgl
             void print_grid();
             
             //_________________________________________RUN METHODS________________________________________//
-            void run(int n_gens);
-            void simulate(int n_gens);
+            // void run(int n_gens);
+            // void simulate(int n_gens);
 
             //_________________________________________GET METHODS________________________________________//
-            int** get_grid();
-            int get_nx();
-            int get_ny();
-            int get_pad();
-            int get_gridsize();
+            // int** get_grid();
+            // int get_nx();
+            // int get_ny();
+            // int get_pad();
+            // int get_gridsize();
             
-            void save(const char* filename);
+            // void save(const char* filename);
     };
 } // Conway's game of life (cgl) namespace

@@ -3,14 +3,31 @@
 using namespace std;
 
 // Get position of array based on matrix indexes
-int get_pos(size_t i, size_t j, size_t, n)
+size_t get_pos(size_t row, size_t col, size_t n_cols)
 {
-    return i + n * j; 
+    return row*n_cols+col; 
 }
+
+static void cuda_check_status(cudaError_t status) {
+    if(status != cudaSuccess) {
+        std::cerr << "error: CUDA API call : "
+                  << cudaGetErrorString(status) << std::endl;
+        exit(1);
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // allocating memory
 ///////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+T* malloc_host(size_t N, T value=T()) {
+    T* ptr = (T*)(malloc(N*sizeof(T)));
+    std::fill(ptr, ptr+N, value);
+
+    return ptr;
+}
 
 // allocate space on GPU for n instances of type T
 template <typename T>
