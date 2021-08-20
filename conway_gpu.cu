@@ -16,11 +16,11 @@ namespace cgl_gpu
         this->p_init   = 0.1;
         this->ind = '*';
         // Allocate grid on host
-        this->grid_host   = this->allocate_grid();
-        this->grid_device = this->allocate_grid();
-        // Initialize grid
+        this->grid_host   = this->allocate_grid("host");
+        this->grid_device = this->allocate_grid("device");
+        // // Initialize grid
         this->initialize_grid(this->p_init);
-        // Copy to device
+        // // Copy to device
         this->update_device();
     }
 
@@ -33,8 +33,10 @@ namespace cgl_gpu
         this->p_init = p_init;
         this->ind = '*';
         // Allocate grid
-        this->grid_host   = this->allocate_grid();
-        this->grid_device = this->allocate_grid();
+        this->grid_host   = this->allocate_grid("host");
+        this->grid_device = this->allocate_grid("device");
+        // this->grid_host   = this->allocate_grid();
+        // this->grid_device = this->allocate_grid();
         // Initialize grid
         this->initialize_grid(this->p_init);
         // Copy to device
@@ -50,8 +52,9 @@ namespace cgl_gpu
         this->p_init = p_init;
         this->ind = ind;
         // Allocate grid on host
-        this->grid_host   = this->allocate_grid();
-        this->grid_device = this->allocate_grid();
+        this->grid_host   = this->allocate_grid("host");
+        this->grid_device = this->allocate_grid("device");
+        // this->grid_host   = this->allocate_grid(); this->grid_device = this->allocate_grid();
         // Initialize grid
         this->initialize_grid(this->p_init);
         // Copy to device
@@ -66,8 +69,10 @@ namespace cgl_gpu
         this->ny  = ny+2*pad;
         this->ind = ind;
         // Allocate grid on host
-        this->grid_host   = this->allocate_grid();
-        this->grid_device = this->allocate_grid();
+        this->grid_host   = this->allocate_grid("host");
+        this->grid_device = this->allocate_grid("device");
+        // this->grid_host   = this->allocate_grid();
+        // this->grid_device = this->allocate_grid();
         // Initialize grid
         this->initialize_grid(init);
         // Copy to device
@@ -124,9 +129,18 @@ namespace cgl_gpu
         
     // }
 
-    int* conway_gpu::allocate_grid()
+    int* conway_gpu::allocate_grid(const char* target)
     {
-        return malloc_device<int>(this->nx*this->ny);
+        int* ptr;
+        if(target=="host") 
+        {
+            ptr = malloc_host<int>(this->nx*this->ny,0);
+        }
+        else if(target=="device") 
+        {
+            ptr = malloc_device<int>(this->nx*this->ny);
+        }
+        return ptr;
     }
 
     void conway_gpu::update_device()
@@ -136,7 +150,7 @@ namespace cgl_gpu
 
     void conway_gpu::update_host()
     {
-        copy_to_device<int>(this->grid_device,this->grid_host,this->nx*this->ny); 
+        copy_to_host<int>(this->grid_device,this->grid_host,this->nx*this->ny); 
     }
 
     void conway_gpu::initialize_grid(float p_init)
@@ -144,10 +158,11 @@ namespace cgl_gpu
         // Random seed based on time 
         srand (time(NULL));
 
-        int pos;
+        size_t pos;
         for(auto r=this->pad; r<this->nx-this->pad; r++) {
             for(auto c=this->pad; c<this->ny-this->pad; c++) {
                pos = get_pos(r,c,this->ny);
+               // std::cout<<pos<<"\n";
                if((float) rand()/RAND_MAX < p_init) this->grid_host[pos] = 1;
             }
         }

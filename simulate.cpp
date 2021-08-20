@@ -71,7 +71,8 @@ int main()
     }
     else
     {
-        conway_gpu pop;
+        conway_gpu pop = conway_gpu();
+        pop.print_grid();
     }
 
     return 1;

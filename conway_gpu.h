@@ -18,7 +18,7 @@ namespace cgl_gpu
             // Individual char representation
             char ind;
             // Allocate grid
-            int* allocate_grid();
+            int* allocate_grid(const char* target);
             // Initialize grid
             void initialize_grid(float p_init);
             // Initialize grid
