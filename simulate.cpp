@@ -2,13 +2,19 @@
 #include <unistd.h>
 #include <string>
 #include "conway.h"
+#include "conway_gpu.h"
 
+#define GPU true
 #define SPACESHIP true
 
 using namespace cgl;
+using namespace cgl_gpu;
 
 int main() 
 {
+    if(GPU==false)
+    {
+
     int n_iter;
     conway pop1;
 
@@ -62,7 +68,11 @@ int main()
             pop1.save(s.c_str());
             gen++;
     }
+    }
+    else
+    {
+        conway_gpu pop;
+    }
 
     return 1;
 }
-

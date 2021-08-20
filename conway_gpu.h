@@ -1,9 +1,9 @@
 // Header for Conway's game of life class definition
 #include <cstddef>
 
-namespace cgl
+namespace cgl_gpu
 {
-    class conway
+    class conway_gpu
     {
         private:
             // Grid size
@@ -20,9 +20,9 @@ namespace cgl
             // Allocate grid
             int* allocate_grid();
             // Initialize grid
-            // void initialize_grid(float p_init);
+            void initialize_grid(float p_init);
             // Initialize grid
-            // void initialize_grid(int** init);
+            void initialize_grid(int** init);
             // Copy data from host to device
             void update_device();
             // Copy data from device to host
@@ -36,13 +36,13 @@ namespace cgl
             // int rules(int state, int n);
         public:
             // Default constructor
-            conway();
-            // Constructor defining grid size and initial population
-            conway(std::size_t nx, std::size_t ny, int pad, float p_init);
-            // Constructor defining grid size and char representing and individual
-            conway(std::size_t nx, std::size_t ny, int pad, float p_init, char ind);
-            // Constructor defining grid size and char representing and individual and initial state
-            conway(std::size_t nx, std::size_t ny, int pad, int** init,   char ind);
+            conway_gpu();
+            // Con_structor defining grid size and initial population
+            conway_gpu(std::size_t nx, std::size_t ny, int pad, float p_init);
+            // Con_structor defining grid size and char representing and individual
+            conway_gpu(std::size_t nx, std::size_t ny, int pad, float p_init, char ind);
+            // Con_structor defining grid size and char representing and individual and initial state
+            conway_gpu(std::size_t nx, std::size_t ny, int pad, int** init,   char ind);
             
             //____________________________________VISUALIZATION METHODS___________________________________//
             void print_grid();

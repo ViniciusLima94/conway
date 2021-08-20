@@ -5,9 +5,9 @@
 #include "conway_gpu.h"
 #include "util.h"
 
-namespace cgl
+namespace cgl_gpu
 {
-    conway::conway()
+    conway_gpu::conway_gpu()
     {
         // Define default parameters
         this->pad = 1;
@@ -19,10 +19,12 @@ namespace cgl
         this->grid_host   = this->allocate_grid();
         this->grid_device = this->allocate_grid();
         // Initialize grid
-        // this->initialize_grid(this->p_init);
+        this->initialize_grid(this->p_init);
+        // Copy to device
+        this->update_device();
     }
 
-    conway::conway(std::size_t nx, std::size_t ny, int pad, float p_init)
+    conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, float p_init)
     {
         // Define default parameters
         this->pad = pad;
@@ -34,10 +36,12 @@ namespace cgl
         this->grid_host   = this->allocate_grid();
         this->grid_device = this->allocate_grid();
         // Initialize grid
-        // this->initialize_grid(this->p_init);
+        this->initialize_grid(this->p_init);
+        // Copy to device
+        this->update_device();
     }
 
-    conway::conway(std::size_t nx, std::size_t ny, int pad, float p_init, char ind)
+    conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, float p_init, char ind)
     {
         // Define default parameters
         this->pad = pad;
@@ -49,10 +53,12 @@ namespace cgl
         this->grid_host   = this->allocate_grid();
         this->grid_device = this->allocate_grid();
         // Initialize grid
-        // this->initialize_grid(this->p_init);
+        this->initialize_grid(this->p_init);
+        // Copy to device
+        this->update_device();
     }
 
-    conway::conway(std::size_t nx, std::size_t ny, int pad, int** init, char ind)
+    conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, int** init, char ind)
     {
         // Define default parameters
         this->pad = pad;
@@ -63,11 +69,13 @@ namespace cgl
         this->grid_host   = this->allocate_grid();
         this->grid_device = this->allocate_grid();
         // Initialize grid
-        // this->initialize_grid(init);
+        this->initialize_grid(init);
+        // Copy to device
+        this->update_device();
     }
     
     //____________________________________VISUALIZATION METHODS___________________________________//
-    void conway::print_grid()
+    void conway_gpu::print_grid()
     {
         size_t pos;
         for(auto r=0; r<this->nx; r++) {
@@ -90,7 +98,7 @@ namespace cgl
     }
     
     //_________________________________________RUN METHODS________________________________________//
-    // void conway::run(int n_gens)
+    // void conway_gpu::run(int n_gens)
     // {
     //     int gen = 0;
     //     while(gen<n_gens)
@@ -100,7 +108,7 @@ namespace cgl
     //     }
     // }
 
-    // void conway::simulate(int n_gens)
+    // void conway_gpu::simulate(int n_gens)
     // {
     //     system("clear");
     //     int gen = 0;
@@ -116,44 +124,47 @@ namespace cgl
         
     // }
 
-    int* conway::allocate_grid()
+    int* conway_gpu::allocate_grid()
     {
         return malloc_device<int>(this->nx*this->ny);
     }
 
-    void conway::update_device()
+    void conway_gpu::update_device()
     {
         copy_to_device<int>(this->grid_host,this->grid_device,this->nx*this->ny); 
     }
 
-    void conway::update_host()
+    void conway_gpu::update_host()
     {
         copy_to_device<int>(this->grid_device,this->grid_host,this->nx*this->ny); 
     }
 
-    // void conway::initialize_grid(float p_init)
-    // {
-    //     // Random seed based on time 
-    //     srand (time(NULL));
+    void conway_gpu::initialize_grid(float p_init)
+    {
+        // Random seed based on time 
+        srand (time(NULL));
 
-    //     for(auto r=this->pad; r<this->nx-this->pad; r++) {
-    //         for(auto c=this->pad; c<this->ny-this->pad; c++) {
-    //            if((float) rand()/RAND_MAX < p_init) this->grid[r][c] = 1;
-    //         }
-    //     }
-    // }
+        int pos;
+        for(auto r=this->pad; r<this->nx-this->pad; r++) {
+            for(auto c=this->pad; c<this->ny-this->pad; c++) {
+               pos = get_pos(r,c,this->ny);
+               if((float) rand()/RAND_MAX < p_init) this->grid_host[pos] = 1;
+            }
+        }
+    }
 
-    // void conway::initialize_grid(int** init)
-    // {
-    //     for(auto r=0; r<this->nx-2*this->pad; r++) {
-    //         for(auto c=0; c<this->ny-2*this->pad; c++) {
-    //             this->grid[r+this->pad][c+this->pad] = init[r][c];
-    //         }
-    //     }
+    void conway_gpu::initialize_grid(int** init)
+    {
+        int pos = 0;
+        for(auto r=0; r<this->nx-2*this->pad; r++) {
+            for(auto c=0; c<this->ny-2*this->pad; c++) {
+               pos = get_pos(r,c,this->ny);
+               // this->grid[r+this->pad][c+this->pad] = init[r][c];
+            }
+        }
+    }
 
-    // }
-
-    // void conway::update_state()
+    // void conway_gpu::update_state()
     // {
     //     // Temporary grid
     //     int n_live   = 0;
@@ -176,7 +187,7 @@ namespace cgl
     //     free(buffer);
     // }
 
-    // int conway::check_neighbors(int i, int j)
+    // int conway_gpu::check_neighbors(int i, int j)
     // {
     //     int n = 0;
     //     for(auto r=i-1;r<=i+1;r++) 
@@ -194,7 +205,7 @@ namespace cgl
     //     return n;
     // }
 
-    // int conway::rules(int state, int n)
+    // int conway_gpu::rules(int state, int n)
     // {
     //     // Game rules        
     //     // Any live cell with two or three live neighbours survives.
@@ -216,32 +227,32 @@ namespace cgl
     // }
 
     //_________________________________________GET METHODS________________________________________//
-    // int** conway::get_grid()
+    // int** conway_gpu::get_grid()
     // {
     //     return this->grid;
     // }
 
-    // int conway::get_gridsize()
+    // int conway_gpu::get_gridsize()
     // {
     //     return (this->nx-1)*(this->ny-1);
     // }
 
-    // int conway::get_nx()
+    // int conway_gpu::get_nx()
     // {
     //     return this->nx;
     // }
 
-    // int conway::get_ny()
+    // int conway_gpu::get_ny()
     // {
     //     return this->ny;
     // }
 
-    // int conway::get_pad()
+    // int conway_gpu::get_pad()
     // {
     //     return this->pad;
     // }
 
-    // void conway::save(const char* filename)
+    // void conway_gpu::save(const char* filename)
     // {
     //     // Save results to file
     //     std::ofstream myfile;
