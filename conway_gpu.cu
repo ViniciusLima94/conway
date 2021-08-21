@@ -21,7 +21,14 @@ namespace cgl_gpu
             if(i>0 && i<nx-1 && j>0 && j<ny-1)
             {
                 pos    = get_pos(i,j,ny);
-                x[pos] = 1;
+                if(x[pos]==0)
+                {
+                    x[pos] = 1;
+                }
+                else
+                {
+                    x[pos] = 0;
+                }
             }
         }
     }
