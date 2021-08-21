@@ -24,11 +24,10 @@ if sim=="spaceship":
     plt.figure(figsize=(6,12))
     for i in range(n_iter):
         # CPU
-        plt.subplot(1,2,1)
         plt.title(f"spaceship - generation {i}", fontsize=15)
-        plt.imshow(grid[i],aspect="auto",cmap="gray")
+        plt.imshow(grid[i],aspect="auto",cmap="gray_r")
         plt.axis('off')
-        plt.savefig(f"figures/gen{i}.png",dpi=100)
+        plt.savefig(f"figures/gen{i}.png",dpi=100, bbox_inches='tight')
         plt.close()
     plt.tight_layout()
 elif sim=="random":
@@ -37,14 +36,14 @@ elif sim=="random":
         # CPU
         plt.subplot(1,2,1)
         plt.title(f"cpu - generation {i}", fontsize=15)
-        plt.imshow(grid[i],aspect="auto",cmap="gray")
+        plt.imshow(grid[i],aspect="auto",cmap="gray_r")
         plt.axis('off')
         # GPU
         plt.subplot(1,2,2)
         plt.title(f"gpu - generation {i}", fontsize=15)
-        plt.imshow(grid_gpu[i],aspect="auto",cmap="gray")
+        plt.imshow(grid_gpu[i],aspect="auto",cmap="gray_r")
         plt.axis('off')
-        plt.savefig(f"figures/gen{i}.png",dpi=100)
+        plt.savefig(f"figures/gen{i}.png",dpi=100,bbox_inches='tight')
         plt.close()
     plt.tight_layout()
 
