@@ -3,6 +3,11 @@
 
 namespace cgl_gpu
 {
+    namespace kernels
+    {
+        __global__
+        void update_state(int* x, std::size_t nx, std::size_t ny);
+    }
     class conway_gpu
     {
         private:
@@ -28,8 +33,7 @@ namespace cgl_gpu
             // Copy data from device to host
             void update_host();
             // Update method
-            // __global__
-            // void update_state();
+            void update_state(int* x, std::size_t nx, std::size_t ny);
             // Method to check how many live neighbors a given cell have
             // int check_neighbors(int i, int j);
             // Apply the rules to a given cell

@@ -1,5 +1,8 @@
 #include <iostream>
 #include <fstream>
+#include <cuda.h>
+#include <curand_kernel.h>
+#include <curand.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "conway_gpu.h"
@@ -7,6 +10,22 @@
 
 namespace cgl_gpu
 {
+    namespace kernels 
+    {
+        __global__
+        void update_state(int* x, std::size_t nx, std::size_t ny)
+        {
+            auto i = threadIdx.x + blockDim.x*blockIdx.x;
+            auto j = threadIdx.y + blockDim.y*blockIdx.y;
+            size_t pos;
+            if(i>0 && i<nx-1 && j>0 && j<ny-1)
+            {
+                pos    = get_pos(i,j,ny);
+                x[pos] = 1;
+            }
+        }
+    }
+
     conway_gpu::conway_gpu()
     {
         // Define default parameters
@@ -22,6 +41,8 @@ namespace cgl_gpu
         this->initialize_grid(this->p_init);
         // // Copy to device
         this->update_device();
+        this->update_state(this->grid_device,this->nx,this->ny);
+        this->update_host();
     }
 
     conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, float p_init)
@@ -35,8 +56,6 @@ namespace cgl_gpu
         // Allocate grid
         this->grid_host   = this->allocate_grid("host");
         this->grid_device = this->allocate_grid("device");
-        // this->grid_host   = this->allocate_grid();
-        // this->grid_device = this->allocate_grid();
         // Initialize grid
         this->initialize_grid(this->p_init);
         // Copy to device
@@ -54,7 +73,6 @@ namespace cgl_gpu
         // Allocate grid on host
         this->grid_host   = this->allocate_grid("host");
         this->grid_device = this->allocate_grid("device");
-        // this->grid_host   = this->allocate_grid(); this->grid_device = this->allocate_grid();
         // Initialize grid
         this->initialize_grid(this->p_init);
         // Copy to device
@@ -71,8 +89,6 @@ namespace cgl_gpu
         // Allocate grid on host
         this->grid_host   = this->allocate_grid("host");
         this->grid_device = this->allocate_grid("device");
-        // this->grid_host   = this->allocate_grid();
-        // this->grid_device = this->allocate_grid();
         // Initialize grid
         this->initialize_grid(init);
         // Copy to device
@@ -179,6 +195,13 @@ namespace cgl_gpu
         }
     }
 
+    void conway_gpu::update_state(int* x, std::size_t nx, std::size_t ny)
+    {
+        // Testing
+        dim3 block_dim(16,16);
+        dim3 grid_dim((this->nx+block_dim.x-1)/block_dim.x,(this->ny+block_dim.y-1)/block_dim.y);
+        kernels::update_state<<<grid_dim,block_dim>>>(this->grid_device,this->nx,this->ny);
+    }
     // void conway_gpu::update_state()
     // {
     //     // Temporary grid

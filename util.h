@@ -3,6 +3,7 @@
 using namespace std;
 
 // Get position of array based on matrix indexes
+__host__ __device__
 size_t get_pos(size_t row, size_t col, size_t n_cols)
 {
     return row*n_cols+col; 
