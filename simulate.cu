@@ -75,8 +75,9 @@ int main()
         int gen = 0;
         s       =  "data/gen"+std::to_string(gen)+".txt";
         conway_gpu pop = conway_gpu(40,100,10,0.2,'o');
-        // conway_gpu pop = conway_gpu();
         pop.print_grid();
+        s =  "data/gen"+std::to_string(gen)+"_gpu.txt";
+        pop.save(s.c_str());
         gen++;
         while(gen<n_iter)
         {
@@ -85,8 +86,8 @@ int main()
                 pop.print_grid();
                 sleep(1);
                 system("clear");
-                // s =  "data/gen"+std::to_string(gen)+".txt";
-                // pop.save(s.c_str());
+                s =  "data/gen"+std::to_string(gen)+"_gpu.txt";
+                pop.save(s.c_str());
                 gen++;
         }
     }

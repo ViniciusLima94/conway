@@ -59,6 +59,6 @@ namespace cgl_gpu
             // int get_pad();
             // int get_gridsize();
             
-            // void save(const char* filename);
+            void save(const char* filename);
     };
 } // Conway's game of life (cgl) namespace
