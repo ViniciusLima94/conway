@@ -13,6 +13,7 @@ grid_gpu = []
 for i in range(n_iter):
     grid_gpu += [pd.read_csv(f"data/gen{i}_gpu.txt", header=None, delimiter=" ").values]
 
+plt.figure(figsize=(20,8))
 for i in range(n_iter):
     # CPU
     plt.subplot(1,2,1)
@@ -26,3 +27,4 @@ for i in range(n_iter):
     plt.axis('off')
     plt.savefig(f"figures/gen{i}.png",dpi=100)
     plt.close()
+plt.tight_layout()

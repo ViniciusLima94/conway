@@ -5,8 +5,8 @@
 #include "conway_gpu.h"
 
 #define n_iter 100
-#define GPU true
-#define SPACESHIP false
+#define GPU false
+#define SPACESHIP true
 
 using namespace cgl;
 using namespace cgl_gpu;

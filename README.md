@@ -10,14 +10,15 @@ Implementation of Conway's game of life in C++.
 
 ### How to run
 
-To compile use: g++ simulate.cpp conway.cpp
+To compile use the **CPU** version use: nvcc simulate.cpp conway.cpp
+To compile use the **GPU** version use: nvcc -c conway_gpu.cu & nvcc conway_gpu.o simulate.cu
 
 To plot the results of the simulation use: ipython plotting.py
 
-In simulate.cpp if SPACESHIP is set to false simulate a randomly initiated grid.
+In simulate.cu if SPACESHIP is set to false simulate a randomly initiated grid.
 
 ![Random initiated grid](figures/RANDOM.gif)
 
-Otherwise it will run the [30P5H2V0](https://bitstorm.org/gameoflife/lexicon/#bk5) spaceship.
+Otherwise it will run the [30P5H2V0](https://bitstorm.org/gameoflife/lexicon/#bk5) spaceship (CPU only)
 
 ![30P5H2V0 spaceship](figures/30P5H2V0.gif)
