@@ -72,13 +72,12 @@ namespace cgl_gpu
         // Allocate grid on host
         this->grid_host   = this->allocate_grid("host");
         this->grid_device = this->allocate_grid("device");
-        // // Initialize grid
+        // Initialize grid on host
         this->initialize_grid(this->p_init);
-        this->print_grid();
+        // this->print_grid();
         // // Copy to device
-        this->update_device();
-        this->update_state(this->grid_device,this->nx,this->ny);
-        this->update_host();
+        // this->update_device();
+        // this->update_state(this->grid_device,this->nx,this->ny);
     }
 
     conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, float p_init)
@@ -155,15 +154,20 @@ namespace cgl_gpu
     }
     
     //_________________________________________RUN METHODS________________________________________//
-    // void conway_gpu::run(int n_gens)
-    // {
-    //     int gen = 0;
-    //     while(gen<n_gens)
-    //     {
-    //         this->update_state();
-    //         gen++;
-    //     }
-    // }
+    void conway_gpu::run(int n_gens)
+    {
+        int gen = 0;
+        while(gen<n_gens)
+        {
+            // Copy state to device
+            this->update_device();
+            // Update state on device
+            this->update_state(this->grid_device,this->nx,this->ny);
+            // Update grid on host
+            this->update_host();
+            gen++;
+        }
+    }
 
     // void conway_gpu::simulate(int n_gens)
     // {

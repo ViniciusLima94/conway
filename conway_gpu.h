@@ -17,8 +17,9 @@ namespace cgl_gpu
             int pad;
             // Probability of initialize
             float p_init;
-            // Grid
+            // Grid in host memory
             int* grid_host;
+            // Grid in device memory
             int* grid_device;
             // Individual char representation
             char ind;
@@ -34,11 +35,6 @@ namespace cgl_gpu
             void update_host();
             // Update method
             void update_state(int* x, std::size_t nx, std::size_t ny);
-            // Method to check how many live neighbors a given cell have
-            // int check_neighbors(int i, int j);
-            // Apply the rules to a given cell
-            // __host__ __device__
-            // int rules(int state, int n);
         public:
             // Default constructor
             conway_gpu();
@@ -53,7 +49,7 @@ namespace cgl_gpu
             void print_grid();
             
             //_________________________________________RUN METHODS________________________________________//
-            // void run(int n_gens);
+            void run(int n_gens);
             // void simulate(int n_gens);
 
             //_________________________________________GET METHODS________________________________________//
