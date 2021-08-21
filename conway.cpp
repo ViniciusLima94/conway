@@ -118,7 +118,8 @@ namespace cgl
     void conway::initialize_grid(float p_init)
     {
         // Random seed based on time 
-        srand (time(NULL));
+        // srand (time(NULL));
+        srand (0);
 
         for(auto r=this->pad; r<this->nx-this->pad; r++) {
             for(auto c=this->pad; c<this->ny-this->pad; c++) {

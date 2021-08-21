@@ -204,7 +204,8 @@ namespace cgl_gpu
     void conway_gpu::initialize_grid(float p_init)
     {
         // Random seed based on time 
-        srand (time(NULL));
+        // srand (time(NULL));
+        srand (0);
 
         size_t pos;
         for(auto r=this->pad; r<this->nx-this->pad; r++) {
@@ -234,108 +235,23 @@ namespace cgl_gpu
         dim3 grid_dim((this->nx+block_dim.x-1)/block_dim.x,(this->ny+block_dim.y-1)/block_dim.y);
         kernels::update_state<<<grid_dim,block_dim>>>(this->grid_device,this->nx,this->ny);
     }
-    // void conway_gpu::update_state()
-    // {
-    //     // Temporary grid
-    //     int n_live   = 0;
-    //     int** buffer = this->allocate_grid();
 
-    //     for(int r=1; r<this->nx-1; r++) {
-    //         for(int c=1; c<this->ny-1; c++) {
-    //             n_live = this->check_neighbors(r,c);
-    //             buffer[r][c] = this->rules(this->grid[r][c], n_live);
-    //         }
-    //     }
+    void conway_gpu::save(const char* filename)
+    {
+        // Save results to file
+        std::ofstream myfile;
+        myfile.open(filename);
 
-    //     // Copy buffer to grid
-    //     for(int r=0; r<this->nx; r++) {
-    //         for(int c=0; c<this->ny; c++) {
-    //             this->grid[r][c] = buffer[r][c];
-    //         }
-    //     }
+        size_t pos;
 
-    //     free(buffer);
-    // }
-
-    // int conway_gpu::check_neighbors(int i, int j)
-    // {
-    //     int n = 0;
-    //     for(auto r=i-1;r<=i+1;r++) 
-    //     {
-    //         for(auto c=j-1;c<=j+1;c++)
-    //         {
-    //             if(r==i && c==j) {
-    //                 continue;
-    //             }
-    //             else {
-    //                 n+=this->grid[r][c];
-    //             }
-    //         }
-    //     }
-    //     return n;
-    // }
-
-    // __host__ __device__
-    // int conway_gpu::rules(int state, int n)
-    // {
-    //     // Game rules        
-    //     // Any live cell with two or three live neighbours survives.
-    //     // Any dead cell with three live neighbours becomes a live cell.
-    //     // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
-    //     int new_state = 0;
-        
-    //     if(state==1)
-    //     {
-    //         if(n==2 || n==3) new_state = 1;
-    //         else new_state = 0;
-    //     }
-    //     else if(state==0)
-    //     {
-    //         if(n==3) new_state = 1;
-    //         else new_state = 0;
-    //     }
-    //     return new_state;
-    // }
-
-    //_________________________________________GET METHODS________________________________________//
-    // int** conway_gpu::get_grid()
-    // {
-    //     return this->grid;
-    // }
-
-    // int conway_gpu::get_gridsize()
-    // {
-    //     return (this->nx-1)*(this->ny-1);
-    // }
-
-    // int conway_gpu::get_nx()
-    // {
-    //     return this->nx;
-    // }
-
-    // int conway_gpu::get_ny()
-    // {
-    //     return this->ny;
-    // }
-
-    // int conway_gpu::get_pad()
-    // {
-    //     return this->pad;
-    // }
-
-    // void conway_gpu::save(const char* filename)
-    // {
-    //     // Save results to file
-    //     std::ofstream myfile;
-    //     myfile.open(filename);
-
-    //     for(auto r=0; r<this->nx; r++) {
-    //         for(auto c=0; c<this->ny; c++) {
-    //             if(c<this->ny-1) myfile << this->grid[r][c] << " ";
-    //             else myfile << this->grid[r][c];
-    //         }
-    //         myfile << "\n";
-    //     }
-    //     myfile.close();
-    // }
+        for(auto r=0; r<this->nx; r++) {
+            for(auto c=0; c<this->ny; c++) {
+                pos = get_pos(r,c,this->ny);
+                if(c<this->ny-1) myfile << this->grid_host[pos] << " ";
+                else myfile << this->grid_host[pos];
+            }
+            myfile << "\n";
+        }
+        myfile.close();
+    }
 }
