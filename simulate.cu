@@ -4,8 +4,9 @@
 #include "conway.h"
 #include "conway_gpu.h"
 
+#define n_iter 100
 #define GPU true
-#define SPACESHIP true
+#define SPACESHIP false
 
 using namespace cgl;
 using namespace cgl_gpu;
@@ -14,12 +15,10 @@ int main()
 {
     if(GPU==false)
     {
-        int n_iter;
         conway pop1;
 
         if(SPACESHIP==true) 
         {
-            n_iter = 100;
             // Initialize a spaceship
             int init[11][13] = {
                 {0,0,0,0,1,0,0,0,0,0,0,0,0},
@@ -48,7 +47,6 @@ int main()
         }
         else
         {
-            n_iter = 300;
             pop1 = conway(40,100,10,0.2,'o');
         }
         std::string s;
@@ -71,7 +69,6 @@ int main()
     else
     {
         std::string s;
-        int n_iter=200;
         int gen = 0;
         s       =  "data/gen"+std::to_string(gen)+".txt";
         conway_gpu pop = conway_gpu(40,100,10,0.2,'o');

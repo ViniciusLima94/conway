@@ -37,29 +37,43 @@ namespace cgl_gpu
     namespace kernels 
     {
         __global__
-        void update_state(int* x, std::size_t nx, std::size_t ny)
+        void check_neighbors(int *n, int* x, std::size_t nx, std::size_t ny)
+        {
+            auto i = threadIdx.x + blockDim.x*blockIdx.x;
+            auto j = threadIdx.y + blockDim.y*blockIdx.y;
+
+            if(i>0 && i<nx-1 && j>0 && j<ny-1)
+            {
+                // Position in the array based on matrix coordinates
+                auto pos     = get_pos(i,j,ny);
+                // Number of neighbors alive
+                n[pos]       = x[pos-1]+x[pos+1] 
+                              +x[get_pos(i-1,j-1,ny)]+x[get_pos(i-1,j,ny)]+x[get_pos(i-1,j+1,ny)]  
+                              +x[get_pos(i+1,j-1,ny)]+x[get_pos(i+1,j,ny)]+x[get_pos(i+1,j+1,ny)]; 
+            }
+        }
+
+        __global__
+        void update_state(int *n, int* x, std::size_t nx, std::size_t ny)
         {
             // Shared memory
-            // extern __shared__ int buffer[];
+            // __shared__ int buffer;
 
             auto i = threadIdx.x + blockDim.x*blockIdx.x;
             auto j = threadIdx.y + blockDim.y*blockIdx.y;
 
-            // Position in the array based on matrix coordinates
-            size_t pos;
-            // Number of neighbors alive
-            int n_alive = 0;
-
             if(i>0 && i<nx-1 && j>0 && j<ny-1)
             {
-                pos     = get_pos(i,j,ny);
-                n_alive = x[pos-1]+x[pos+1]
-                          +x[get_pos(i-1,j-1,ny)]+x[get_pos(i-1,j,ny)]+x[get_pos(i-1,j+1,ny)]
-                          +x[get_pos(i+1,j-1,ny)]+x[get_pos(i+1,j,ny)]+x[get_pos(i+1,j+1,ny)];
-                
-                x[pos] = rules(x[pos],n_alive);
+                // Position in the array based on matrix coordinates
+                auto pos     = get_pos(i,j,ny);
+                // Number of neighbors alive
+                // auto n_alive = x[pos-1]+x[pos+1] 
+                //               +x[get_pos(i-1,j-1,ny)]+x[get_pos(i-1,j,ny)]+x[get_pos(i-1,j+1,ny)]  
+                //               +x[get_pos(i+1,j-1,ny)]+x[get_pos(i+1,j,ny)]+x[get_pos(i+1,j+1,ny)]; 
+                x[pos] = rules(x[pos],n[pos]); 
+                // __syncthreads();
+                // x[pos] = buffer;
             }
-            // __syncthreads();
         }
     }
 
@@ -74,6 +88,8 @@ namespace cgl_gpu
         // Allocate grid on host
         this->grid_host   = this->allocate_grid("host");
         this->grid_device = this->allocate_grid("device");
+        // Allocate array to store number of alive neighbors
+        this->n_alive = this->allocate_grid("device");
         // Initialize grid on host
         this->initialize_grid(this->p_init);
     }
@@ -89,6 +105,8 @@ namespace cgl_gpu
         // Allocate grid
         this->grid_host   = this->allocate_grid("host");
         this->grid_device = this->allocate_grid("device");
+        // Allocate array to store number of alive neighbors
+        this->n_alive = this->allocate_grid("device");
         // Initialize grid
         this->initialize_grid(this->p_init);
     }
@@ -104,6 +122,8 @@ namespace cgl_gpu
         // Allocate grid on host
         this->grid_host   = this->allocate_grid("host");
         this->grid_device = this->allocate_grid("device");
+        // Allocate array to store number of alive neighbors
+        this->n_alive = this->allocate_grid("device");
         // Initialize grid
         this->initialize_grid(this->p_init);
     }
@@ -118,6 +138,8 @@ namespace cgl_gpu
         // Allocate grid on host
         this->grid_host   = this->allocate_grid("host");
         this->grid_device = this->allocate_grid("device");
+        // Allocate array to store number of alive neighbors
+        this->n_alive = this->allocate_grid("device");
         // Initialize grid
         this->initialize_grid(init);
     }
@@ -211,7 +233,6 @@ namespace cgl_gpu
         for(auto r=this->pad; r<this->nx-this->pad; r++) {
             for(auto c=this->pad; c<this->ny-this->pad; c++) {
                pos = get_pos(r,c,this->ny);
-               // std::cout<<pos<<"\n";
                if((float) rand()/RAND_MAX < p_init) this->grid_host[pos] = 1;
             }
         }
@@ -219,21 +240,42 @@ namespace cgl_gpu
 
     void conway_gpu::initialize_grid(int** init)
     {
-        int pos = 0;
-        for(auto r=0; r<this->nx-2*this->pad; r++) {
-            for(auto c=0; c<this->ny-2*this->pad; c++) {
-               pos = get_pos(r,c,this->ny);
-               // this->grid[r+this->pad][c+this->pad] = init[r][c];
-            }
-        }
     }
 
     void conway_gpu::update_state(int* x, std::size_t nx, std::size_t ny)
     {
-        // Testing
+        // Create block of threads
         dim3 block_dim(16,16);
         dim3 grid_dim((this->nx+block_dim.x-1)/block_dim.x,(this->ny+block_dim.y-1)/block_dim.y);
-        kernels::update_state<<<grid_dim,block_dim>>>(this->grid_device,this->nx,this->ny);
+        // First find number of neighbors for each cell
+        kernels::check_neighbors<<<grid_dim,block_dim>>>(this->n_alive,this->grid_device,this->nx,this->ny);
+        // Update the cells in the GPU
+        kernels::update_state<<<grid_dim,block_dim>>>(this->n_alive,this->grid_device,this->nx,this->ny);
+    }
+
+    int* conway_gpu::get_grid()
+    {
+        return this->grid_host;
+    }
+
+    int conway_gpu::get_gridsize()
+    {
+        return (this->nx-1)*(this->ny-1);
+    }
+
+    int conway_gpu::get_nx()
+    {
+        return this->nx;
+    }
+
+    int conway_gpu::get_ny()
+    {
+        return this->ny;
+    }
+
+    int conway_gpu::get_pad()
+    {
+        return this->pad;
     }
 
     void conway_gpu::save(const char* filename)

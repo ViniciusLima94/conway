@@ -17,6 +17,8 @@ namespace cgl_gpu
             int pad;
             // Probability of initialize
             float p_init;
+            // Number of alive neighbors for each cell
+            int* n_alive;
             // Grid in host memory
             int* grid_host;
             // Grid in device memory
@@ -53,11 +55,11 @@ namespace cgl_gpu
             // void simulate(int n_gens);
 
             //_________________________________________GET METHODS________________________________________//
-            // int** get_grid();
-            // int get_nx();
-            // int get_ny();
-            // int get_pad();
-            // int get_gridsize();
+            int* get_grid();
+            int get_nx();
+            int get_ny();
+            int get_pad();
+            int get_gridsize();
             
             void save(const char* filename);
     };
