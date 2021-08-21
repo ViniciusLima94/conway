@@ -74,10 +74,6 @@ namespace cgl_gpu
         this->grid_device = this->allocate_grid("device");
         // Initialize grid on host
         this->initialize_grid(this->p_init);
-        // this->print_grid();
-        // // Copy to device
-        // this->update_device();
-        // this->update_state(this->grid_device,this->nx,this->ny);
     }
 
     conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, float p_init)
@@ -93,8 +89,6 @@ namespace cgl_gpu
         this->grid_device = this->allocate_grid("device");
         // Initialize grid
         this->initialize_grid(this->p_init);
-        // Copy to device
-        this->update_device();
     }
 
     conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, float p_init, char ind)
@@ -110,8 +104,6 @@ namespace cgl_gpu
         this->grid_device = this->allocate_grid("device");
         // Initialize grid
         this->initialize_grid(this->p_init);
-        // Copy to device
-        this->update_device();
     }
 
     conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, int** init, char ind)
@@ -126,8 +118,6 @@ namespace cgl_gpu
         this->grid_device = this->allocate_grid("device");
         // Initialize grid
         this->initialize_grid(init);
-        // Copy to device
-        this->update_device();
     }
     
     //____________________________________VISUALIZATION METHODS___________________________________//

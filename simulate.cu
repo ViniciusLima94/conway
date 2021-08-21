@@ -74,7 +74,8 @@ int main()
         int n_iter=100;
         int gen = 0;
         s       =  "data/gen"+std::to_string(gen)+".txt";
-        conway_gpu pop = conway_gpu();
+        conway+gpu pop = conway(40,100,10,0.2,'o');
+        // conway_gpu pop = conway_gpu();
         pop.print_grid();
         gen++;
         while(gen<n_iter)
