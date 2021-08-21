@@ -54,17 +54,17 @@ int main()
         std::string s;
         int gen = 0;
         s       =  "data/gen"+std::to_string(gen)+".txt";
-        // pop.save(s.c_str());
+        pop1.save(s.c_str());
         gen++;
         while(gen<n_iter)
         {
                 std::cout<< "gen: " << gen << "\n";
-                pop.run(1);
-                pop.print_grid();
+                pop1.run(1);
+                pop1.print_grid();
                 sleep(1);
                 system("clear");
-                // s =  "data/gen"+std::to_string(gen)+".txt";
-                // pop.save(s.c_str());
+                s =  "data/gen"+std::to_string(gen)+".txt";
+                pop1.save(s.c_str());
                 gen++;
         }
     }
@@ -79,12 +79,12 @@ int main()
         while(gen<n_iter)
         {
                 std::cout<< "gen: " << gen << "\n";
-                pop1.run(1);
-                pop1.print_grid();
+                pop.run(1);
+                pop.print_grid();
                 sleep(1);
                 system("clear");
-                s =  "data/gen"+std::to_string(gen)+".txt";
-                pop1.save(s.c_str());
+                // s =  "data/gen"+std::to_string(gen)+".txt";
+                // pop.save(s.c_str());
                 gen++;
         }
     }
