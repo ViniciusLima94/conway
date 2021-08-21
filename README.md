@@ -10,8 +10,8 @@ Implementation of Conway's game of life in C++.
 
 ### How to run
 
-To compile use the **CPU** version use: nvcc simulate.cpp conway.cpp
-To compile use the **GPU** version use: nvcc -c conway_gpu.cu & nvcc conway_gpu.o simulate.cu
+- To compile use the **CPU** version use: nvcc simulate.cpp conway.cpp
+- To compile use the **GPU** version use: nvcc -c conway_gpu.cu & nvcc conway_gpu.o simulate.cu
 
 To plot the results of the simulation use: ipython plotting.py
 
