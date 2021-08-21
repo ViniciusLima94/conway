@@ -46,6 +46,7 @@ namespace cgl_gpu
         this->grid_device = this->allocate_grid("device");
         // // Initialize grid
         this->initialize_grid(this->p_init);
+        this->print_grid();
         // // Copy to device
         this->update_device();
         this->update_state(this->grid_device,this->nx,this->ny);
