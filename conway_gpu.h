@@ -37,6 +37,7 @@ namespace cgl_gpu
             // Method to check how many live neighbors a given cell have
             // int check_neighbors(int i, int j);
             // Apply the rules to a given cell
+            // __host__ __device__
             // int rules(int state, int n);
         public:
             // Default constructor

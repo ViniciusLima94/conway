@@ -10,26 +10,54 @@
 
 namespace cgl_gpu
 {
+    __host__ __device__
+    int rules(int state, int n)
+    {
+        // Game rules        
+        // Any live cell with two or three live neighbours survives.
+        // Any dead cell with three live neighbours becomes a live cell.
+        // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
+        int new_state = 0;
+        
+        if(state==1)
+        {
+            if(n==2 || n==3) new_state = 1;
+            else new_state = 0;
+        }
+        else if(state==0)
+        {
+            if(n==3) new_state = 1;
+            else new_state = 0;
+        }
+        return new_state;
+    }
+
     namespace kernels 
     {
         __global__
         void update_state(int* x, std::size_t nx, std::size_t ny)
         {
+            // Shared memory
+            // extern __shared__ int buffer[];
+
             auto i = threadIdx.x + blockDim.x*blockIdx.x;
             auto j = threadIdx.y + blockDim.y*blockIdx.y;
+
+            // Position in the array based on matrix coordinates
             size_t pos;
+            // Number of neighbors alive
+            int n_alive = 0;
+
             if(i>0 && i<nx-1 && j>0 && j<ny-1)
             {
-                pos    = get_pos(i,j,ny);
-                if(x[pos]==0)
-                {
-                    x[pos] = 1;
-                }
-                else
-                {
-                    x[pos] = 0;
-                }
+                pos     = get_pos(i,j,ny);
+                n_alive = x[pos-1]+x[pos+1]
+                          +x[get_pos(i-1,j-1,ny)]+x[get_pos(i-1,j,ny)]+x[get_pos(i-1,j+1,ny)]
+                          +x[get_pos(i+1,j-1,ny)]+x[get_pos(i+1,j,ny)]+x[get_pos(i+1,j+1,ny)];
+                
+                x[pos] = rules(x[pos],n_alive);
             }
+            // __syncthreads();
         }
     }
 
@@ -251,6 +279,7 @@ namespace cgl_gpu
     //     return n;
     // }
 
+    // __host__ __device__
     // int conway_gpu::rules(int state, int n)
     // {
     //     // Game rules        
