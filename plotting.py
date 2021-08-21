@@ -16,6 +16,7 @@ n_iter = 100
 grid = []
 for i in range(n_iter):
     grid += [pd.read_csv(f"data/gen{i}.txt", header=None, delimiter=" ").values]
+
 if sim=="spaceship":
 
     plt.figure(figsize=(6,12))
@@ -25,8 +26,10 @@ if sim=="spaceship":
         plt.imshow(grid[i],aspect="auto",cmap="gray_r")
         plt.axis('off')
         plt.tight_layout()
-        plt.savefig(f"figures/gen{i}.png",dpi=100, bbox_inches='tight')
+        #  plt.savefig(f"figures/gen{i}.png",dpi=100, bbox_inches='tight')
+        plt.savefig(f"figures/gen{i}.png",dpi=100)
         plt.close()
+
 elif sim=="random":
 
     grid_gpu = []
@@ -46,6 +49,7 @@ elif sim=="random":
         plt.imshow(grid_gpu[i],aspect="auto",cmap="gray_r")
         plt.axis('off')
         plt.tight_layout()
-        plt.savefig(f"figures/gen{i}.png",dpi=100,bbox_inches='tight')
+        #  plt.savefig(f"figures/gen{i}.png",dpi=100,bbox_inches='tight')
+        plt.savefig(f"figures/gen{i}.png",dpi=100)
         plt.close()
 
