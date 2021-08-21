@@ -10,6 +10,8 @@
 
 namespace cgl_gpu
 {
+    // In this case the rule set is declared outsid of class to be 
+    // called in the kernel
     __host__ __device__
     int rules(int state, int n)
     {
