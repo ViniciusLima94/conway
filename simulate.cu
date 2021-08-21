@@ -71,6 +71,7 @@ int main()
     else
     {
         std::string s;
+        int n_iter=100;
         int gen = 0;
         s       =  "data/gen"+std::to_string(gen)+".txt";
         conway_gpu pop = conway_gpu();
