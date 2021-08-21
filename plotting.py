@@ -17,9 +17,6 @@ grid = []
 for i in range(n_iter):
     grid += [pd.read_csv(f"data/gen{i}.txt", header=None, delimiter=" ").values]
 if sim=="spaceship":
-    grid_gpu = []
-    for i in range(n_iter):
-        grid_gpu += [pd.read_csv(f"data/gen{i}_gpu.txt", header=None, delimiter=" ").values]
 
     plt.figure(figsize=(6,12))
     for i in range(n_iter):
@@ -27,10 +24,15 @@ if sim=="spaceship":
         plt.title(f"spaceship - generation {i}", fontsize=15)
         plt.imshow(grid[i],aspect="auto",cmap="gray_r")
         plt.axis('off')
+        plt.tight_layout()
         plt.savefig(f"figures/gen{i}.png",dpi=100, bbox_inches='tight')
         plt.close()
-    plt.tight_layout()
 elif sim=="random":
+
+    grid_gpu = []
+    for i in range(n_iter):
+        grid_gpu += [pd.read_csv(f"data/gen{i}_gpu.txt", header=None, delimiter=" ").values]
+
     plt.figure(figsize=(20,8))
     for i in range(n_iter):
         # CPU
@@ -43,7 +45,7 @@ elif sim=="random":
         plt.title(f"gpu - generation {i}", fontsize=15)
         plt.imshow(grid_gpu[i],aspect="auto",cmap="gray_r")
         plt.axis('off')
+        plt.tight_layout()
         plt.savefig(f"figures/gen{i}.png",dpi=100,bbox_inches='tight')
         plt.close()
-    plt.tight_layout()
 
