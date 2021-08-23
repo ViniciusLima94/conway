@@ -57,7 +57,6 @@ namespace cgl_gpu
         void update_state(int *n, int* x, std::size_t nx, std::size_t ny)
         {
             // Shared memory
-            // __shared__ int buffer;
 
             auto i = threadIdx.x + blockDim.x*blockIdx.x;
             auto j = threadIdx.y + blockDim.y*blockIdx.y;
@@ -66,13 +65,8 @@ namespace cgl_gpu
             {
                 // Position in the array based on matrix coordinates
                 auto pos     = get_pos(i,j,ny);
-                // Number of neighbors alive
-                // auto n_alive = x[pos-1]+x[pos+1] 
-                //               +x[get_pos(i-1,j-1,ny)]+x[get_pos(i-1,j,ny)]+x[get_pos(i-1,j+1,ny)]  
-                //               +x[get_pos(i+1,j-1,ny)]+x[get_pos(i+1,j,ny)]+x[get_pos(i+1,j+1,ny)]; 
+                // Updating cells
                 x[pos] = rules(x[pos],n[pos]); 
-                // __syncthreads();
-                // x[pos] = buffer;
             }
         }
     }
@@ -128,7 +122,7 @@ namespace cgl_gpu
         this->initialize_grid(this->p_init);
     }
 
-    conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, int** init, char ind)
+    conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, int* init, char ind)
     {
         // Define default parameters
         this->pad = pad;
@@ -171,10 +165,10 @@ namespace cgl_gpu
     void conway_gpu::run(int n_gens)
     {
         int gen = 0;
+        // Copy state to device
+        this->update_device();
         while(gen<n_gens)
         {
-            // Copy state to device
-            this->update_device();
             // Update state on device
             this->update_state(this->grid_device,this->nx,this->ny);
             // Update grid on host
@@ -183,21 +177,16 @@ namespace cgl_gpu
         }
     }
 
-    // void conway_gpu::simulate(int n_gens)
-    // {
-    //     system("clear");
-    //     int gen = 0;
-    //     this->print_grid();
-    //     while(gen<n_gens)
-    //     {
-    //         this->run(1);
-    //         this->print_grid();
-    //         sleep(1);
-    //         system("clear");
-    //         gen++;
-    //     }
-        
-    // }
+    // This will be used for benchmark
+    void conway_gpu::simulate(int n_gens)
+    {
+        int gen = 0;
+        while(gen<n_gens)
+        {
+            this->run(1);
+            gen++;
+        }
+    }
 
     int* conway_gpu::allocate_grid(const char* target)
     {
@@ -238,8 +227,16 @@ namespace cgl_gpu
         }
     }
 
-    void conway_gpu::initialize_grid(int** init)
+    void conway_gpu::initialize_grid(int* init)
     {
+        size_t pos_grid, pos_init;
+        for(auto r=0; r<this->nx-2*this->pad; r++) {
+            for(auto c=0; c<this->ny-2*this->pad; c++) {
+               pos_grid = get_pos(r+this->pad,c+this->pad,this->ny);
+               pos_init = get_pos(r,c,this->ny-2*this->pad);
+               this->grid_host[pos_grid] = init[pos_init];
+            }
+        }
     }
 
     void conway_gpu::update_state(int* x, std::size_t nx, std::size_t ny)

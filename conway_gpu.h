@@ -30,7 +30,7 @@ namespace cgl_gpu
             // Initialize grid
             void initialize_grid(float p_init);
             // Initialize grid
-            void initialize_grid(int** init);
+            void initialize_grid(int* init);
             // Copy data from host to device
             void update_device();
             // Copy data from device to host
@@ -45,14 +45,14 @@ namespace cgl_gpu
             // Con_structor defining grid size and char representing and individual
             conway_gpu(std::size_t nx, std::size_t ny, int pad, float p_init, char ind);
             // Con_structor defining grid size and char representing and individual and initial state
-            conway_gpu(std::size_t nx, std::size_t ny, int pad, int** init,   char ind);
+            conway_gpu(std::size_t nx, std::size_t ny, int pad, int* init,   char ind);
             
             //____________________________________VISUALIZATION METHODS___________________________________//
             void print_grid();
             
             //_________________________________________RUN METHODS________________________________________//
             void run(int n_gens);
-            // void simulate(int n_gens);
+            void simulate(int n_gens);
 
             //_________________________________________GET METHODS________________________________________//
             int* get_grid();

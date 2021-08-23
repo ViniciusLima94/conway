@@ -94,17 +94,13 @@ namespace cgl
         }
     }
 
+    // This will be used to benchmark
     void conway::simulate(int n_gens)
     {
-        system("clear");
         int gen = 0;
-        this->print_grid();
         while(gen<n_gens)
         {
             this->run(1);
-            this->print_grid();
-            sleep(1);
-            system("clear");
             gen++;
         }
         
@@ -135,7 +131,6 @@ namespace cgl
                 this->grid[r+this->pad][c+this->pad] = init[r][c];
             }
         }
-
     }
 
     void conway::update_state()
