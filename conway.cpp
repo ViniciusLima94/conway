@@ -94,18 +94,6 @@ namespace cgl
         }
     }
 
-    // This will be used to benchmark
-    void conway::simulate(int n_gens)
-    {
-        int gen = 0;
-        while(gen<n_gens)
-        {
-            this->run(1);
-            gen++;
-        }
-        
-    }
-
     int** conway::allocate_grid()
     {
         return zeros(this->nx, this->ny);

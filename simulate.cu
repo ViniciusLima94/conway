@@ -99,7 +99,6 @@ int main(int argc, char *argv[])
 
         std::string s;
         int gen = 0;
-        // s       =  "data/gen"+std::to_string(gen)+".txt";
         s       = return_fn(gen,suffix); 
         pop.save(s.c_str());
         pop.print_grid();
@@ -112,7 +111,6 @@ int main(int argc, char *argv[])
                 sleep(1);
                 system("clear");
                 s = return_fn(gen,suffix); 
-                // s =  "data/gen"+std::to_string(gen)+".txt";
                 pop.save(s.c_str());
                 gen++;
         }
@@ -150,7 +148,6 @@ int main(int argc, char *argv[])
                 sleep(1);
                 system("clear");
                 s = return_fn(gen,suffix); 
-                // s =  "data/gen"+std::to_string(gen)+"_gpu.txt";
                 pop.save(s.c_str());
                 gen++;
         }

@@ -61,6 +61,7 @@ namespace cgl_gpu
             auto i = threadIdx.x + blockDim.x*blockIdx.x;
             auto j = threadIdx.y + blockDim.y*blockIdx.y;
 
+
             if(i>0 && i<nx-1 && j>0 && j<ny-1)
             {
                 // Position in the array based on matrix coordinates
@@ -69,7 +70,7 @@ namespace cgl_gpu
                 x[pos] = rules(x[pos],n[pos]); 
             }
         }
-    }
+    } // namespace kernels
 
     conway_gpu::conway_gpu()
     {
@@ -86,6 +87,8 @@ namespace cgl_gpu
         this->n_alive = this->allocate_grid("device");
         // Initialize grid on host
         this->initialize_grid(this->p_init);
+        // Copy state to device
+        this->update_device();
     }
 
     conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, float p_init)
@@ -103,6 +106,8 @@ namespace cgl_gpu
         this->n_alive = this->allocate_grid("device");
         // Initialize grid
         this->initialize_grid(this->p_init);
+        // Copy state to device
+        this->update_device();
     }
 
     conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, float p_init, char ind)
@@ -120,6 +125,8 @@ namespace cgl_gpu
         this->n_alive = this->allocate_grid("device");
         // Initialize grid
         this->initialize_grid(this->p_init);
+        // Copy state to device
+        this->update_device();
     }
 
     conway_gpu::conway_gpu(std::size_t nx, std::size_t ny, int pad, int* init, char ind)
@@ -136,6 +143,8 @@ namespace cgl_gpu
         this->n_alive = this->allocate_grid("device");
         // Initialize grid
         this->initialize_grid(init);
+        // Copy state to device
+        this->update_device();
     }
     
     //____________________________________VISUALIZATION METHODS___________________________________//
@@ -165,27 +174,14 @@ namespace cgl_gpu
     void conway_gpu::run(int n_gens)
     {
         int gen = 0;
-        // Copy state to device
-        this->update_device();
         while(gen<n_gens)
         {
             // Update state on device
             this->update_state(this->grid_device,this->nx,this->ny);
-            // Update grid on host
-            this->update_host();
             gen++;
         }
-    }
-
-    // This will be used for benchmark
-    void conway_gpu::simulate(int n_gens)
-    {
-        int gen = 0;
-        while(gen<n_gens)
-        {
-            this->run(1);
-            gen++;
-        }
+        // Update grid on host
+        this->update_host();
     }
 
     int* conway_gpu::allocate_grid(const char* target)
