@@ -19,14 +19,14 @@ for i in range(n_iter):
 
 if sim=="spaceship":
 
-    plt.figure(figsize=(6,12))
     for i in range(n_iter):
+        plt.figure(figsize=(6,10))
         # CPU
         plt.title(f"spaceship - generation {i}", fontsize=15)
         plt.imshow(grid[i],aspect="auto",cmap="gray_r")
         plt.axis('off')
-        #  plt.savefig(f"figures/gen{i}.png",dpi=100, bbox_inches='tight')
-        plt.savefig(f"figures/gen{i}.png",dpi=100)
+        plt.savefig(f"figures/gen{i}.png",dpi=100, bbox_inches='tight')
+        #  plt.savefig(f"figures/gen{i}.png",dpi=100)
         plt.close()
 
 elif sim=="random":
@@ -35,8 +35,8 @@ elif sim=="random":
     for i in range(n_iter):
         grid_gpu += [pd.read_csv(f"data/gen{i}_gpu.txt", header=None, delimiter=" ").values]
 
-    plt.figure(figsize=(20,8))
     for i in range(n_iter):
+        plt.figure(figsize=(20,8))
         # CPU
         plt.subplot(1,2,1)
         plt.title(f"cpu - generation {i}", fontsize=15)
@@ -47,7 +47,7 @@ elif sim=="random":
         plt.title(f"gpu - generation {i}", fontsize=15)
         plt.imshow(grid_gpu[i],aspect="auto",cmap="gray_r")
         plt.axis('off')
-        #  plt.savefig(f"figures/gen{i}.png",dpi=100,bbox_inches='tight')
-        plt.savefig(f"figures/gen{i}.png",dpi=100)
+        plt.savefig(f"figures/gen{i}.png",dpi=100,bbox_inches='tight')
+        #  plt.savefig(f"figures/gen{i}.png",dpi=100)
         plt.close()
 

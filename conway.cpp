@@ -130,15 +130,6 @@ namespace cgl
 
     void conway::initialize_grid(int** init)
     {
-        // for(auto i=0; i<11; i++)
-        // {
-        //     for(auto j=0; j<13; j++) 
-        //     {
-        //         std::cout << init[i][j] << ", ";
-        //     }
-        //     std::cout << "\n";
-        // }
-    
         for(auto r=0; r<this->nx-2*this->pad; r++) {
             for(auto c=0; c<this->ny-2*this->pad; c++) {
                 this->grid[r+this->pad][c+this->pad] = init[r][c];
@@ -186,34 +177,6 @@ namespace cgl
             }
         }
         return n;
-        // int n = 0;
-        // if(i==0 && j>0 && j<this->ny) 
-        // {
-        //     n = this->grid[i][j-1]+this->grid[i][j+1]+this->grid[i+1][j-1]+
-        //         this->grid[i+1][j]+this->grid[i+1][j+1];
-        // }
-        // if(j==0 && i>0 && i<this->nx) 
-        // {
-        //     n = this->grid[i-1][j]+this->grid[i-1][j]+
-        //         this->grid[i+1][j]+this->grid[i+1][j+1];
-        // }
-        // if(i==0 && j==0) 
-        // {
-        //     n = this->grid[i][j+1]+this->grid[i+1][j]+this->grid[i+1][j+1];
-        // }
-        // if(i==this->nx-1)
-        // {
-        //     end_r = i;
-        // }
-        // if(j==0) 
-        // {
-        //     init_c = j;
-        // }
-        // if(j==this->ny-1)
-        // {
-        //     end_c = j;
-        // }
-        // return n;
     }
 
     int conway::rules(int state, int n)
