@@ -36,10 +36,6 @@ int main(int argc, char *argv[])
     // Creting gpu population
     conway_gpu pgpu = conway_gpu(nx,ny,pad,p_init,'o');
 
-    // pcpu.print_grid();
-    // cout << "\n\n";
-    // pgpu.print_grid();
-
     // SIMULATE CPU
     auto start = get_time();
     pcpu.run(n_iter);
@@ -70,10 +66,6 @@ int main(int argc, char *argv[])
     cout << "---------------------------------------------------\n";
     cout << "grid size: " << (nx+pad)*(ny+pad) <<  " CPU: " << t_cpu << ", GPU: " << t_gpu << ", err: " << err << "\n";
     cout << "---------------------------------------------------\n";
-
-    // pcpu.print_grid();
-    // cout << "\n\n";
-    // pgpu.print_grid();
 
 
 }
